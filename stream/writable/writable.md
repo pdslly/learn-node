@@ -20,15 +20,12 @@ class myWritableStream extends Writable {
 * onwrite
 ```javascript
 function onwrite(stream, er) {
-
   ......
-
   if (er)
     onwriteError(stream, state, sync, er, cb);
   else {
     // Check if we're actually ready to finish, but don't emit yet
     var finished = needFinish(state);
-
     // 如果state.corked不为0 调用clearBuffer
     if (!finished &&
         !state.corked &&
@@ -36,7 +33,6 @@ function onwrite(stream, er) {
         state.bufferedRequest) {
       clearBuffer(stream, state);
     }
-
     if (sync) {
       process.nextTick(afterWrite, stream, state, finished, cb);
     } else {
@@ -48,9 +44,7 @@ function onwrite(stream, er) {
 * clearBuffer
 ```javascript
 function clearBuffer(stream, state) {
-
   ......
-
   // 如果有声明_writev 此处Buffer 转化为数组
   if (stream._writev && entry && entry.next) {
     // Fast case, write everything using _writev()
@@ -71,9 +65,7 @@ function clearBuffer(stream, state) {
     buffer.allBuffers = allBuffers;
 
     doWrite(stream, state, true, state.length, buffer, '', holder.finish);
-
     ......
-
   } else {
     // Slow case, write chunks one-by-one
     while (entry) {
@@ -83,23 +75,16 @@ function clearBuffer(stream, state) {
       var len = state.objectMode ? 1 : chunk.length;
 
       doWrite(stream, state, false, len, chunk, encoding, cb);
-
       ......
-
     }
-
   }
-
   ......
-
 }
 ```
 * Writable.prototype.write
 ```javascript
 Writable.prototype.write = function(chunk, encoding, cb) {
-
   ......
-
   if (state.ended)
     // 如果已经调用end事件 此处抛出错误write after end
     writeAfterEnd(this, cb);
@@ -107,7 +92,6 @@ Writable.prototype.write = function(chunk, encoding, cb) {
     state.pendingcb++;
     ret = writeOrBuffer(this, state, isBuf, chunk, encoding, cb);
   }
-
   ......
 };
 
@@ -132,9 +116,7 @@ process.nextTick(() => {
 ```javascript
 
 function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
-
   ......
-
   // 如果正在写入或者已经调用cord() state.bufferedRequest循环存储 否则调用doWrite
   if (state.writing || state.corked) {
     var last = state.lastBufferedRequest;
@@ -154,17 +136,13 @@ function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
   } else {
     doWrite(stream, state, false, len, chunk, encoding, cb);
   }
-
   ......
-
 }
 ```
 * doWrite
 ```javascript
 function doWrite(stream, state, writev, len, chunk, encoding, cb) {
-
   ......
-
   // 如果在new Wriable(option)对象时 指定了option.writev钩子函数 此处调用option.writev 否则调用option.write
   if (writev)
     stream._writev(chunk, state.onwrite);
