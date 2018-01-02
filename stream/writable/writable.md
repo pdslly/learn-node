@@ -4,16 +4,16 @@
 const {Writable} = require('stream')
 class myWritableStream extends Writable {
     /********
-    /* chunk 读取的Buffer块
-    /* encoding 字符编码格式 如‘buffer’
-    /* onwritecb 内部函数 见_stream_wriable.js L422
-    /********
+     * chunk 读取的Buffer块
+     * encoding 字符编码格式 如‘buffer’
+     * onwritecb 内部函数 见_stream_wriable.js L422
+     *********/
     _write(chunk, encoding, onwritecb) {}
 
     /********
-    /* chunks 包含Buffer的数组
-    /* onwritecb 内部函数 见_stream_wriable.js L422
-    /********
+     * chunks 包含Buffer的数组
+     * onwritecb 内部函数 见_stream_wriable.js L422
+     ********/
     _writev(chunks, onwritecb) {}
 }
 ```
